@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>DliCOM Community ID Card</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    padding:18px 10px 50px;
+    font-family:Inter,Arial,sans-serif;
+    color:#fff;
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #1b3180 0%,
+            #080d29 40%,
+            #02030b 100%
+        );
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:24px;
+}
+
+.header h1{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(28px,6vw,46px);
+    font-weight:800;
+}
+
+.header p{
+    margin-top:7px;
+    color:#9aa9d0;
+    font-size:14px;
+    font-weight:700;
+}
+
+.form-box{
+    padding:20px;
+    border-radius:20px;
+    background:rgba(7,14,40,.96);
+    border:1px solid rgba(86,121,255,.35);
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+.form-title{
+    margin-bottom:18px;
+    font-family:"Space Grotesk",sans-serif;
+    font-size:21px;
+    font-weight:800;
+}
+
+.field{
+    margin-bottom:17px;
+}
+
+label{
+    display:block;
+    margin-bottom:7px;
+    color:#91a8e9;
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+input,
+select{
+    width:100%;
+    height:50px;
+    padding:0 14px;
+    border:1px solid #293b72;
+    border-radius:11px;
+    outline:none;
+    background:#080f2b;
+    color:#fff;
+    font-family:Inter,sans-serif;
+    font-size:14px;
+    font-weight:700;
+}
+
+input:focus,
+select:focus{
+    border-color:#527dff;
+    box-shadow:0 0 0 3px rgba(82,125,255,.12);
+}
+
+select option{
+    background:#080f2b;
+    color:#fff;
+}
+
+/* ROLE */
+
+.role-select,
+.country-select{
+    position:relative;
+}
+
+.role-button,
+.country-button{
+    width:100%;
+    min-height:50px;
+    padding:0 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    border:1px solid #293b72;
+    border-radius:11px;
+    background:#080f2b;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.role-text,
+.country-text{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.role-menu,
+.country-menu{
+    display:none;
+    position:absolute;
+    z-index:100;
+    top:57px;
+    left:0;
+    right:0;
+    padding:8px;
+    border:1px solid #30467e;
+    border-radius:14px;
+    background:#070d25;
+    box-shadow:0 20px 50px rgba(0,0,0,.7);
+}
+
+.role-menu.open,
+.country-menu.open{
+    display:block;
+}
+
+.role-menu{
+    max-height:330px;
+    overflow-y:auto;
+}
+
+.role-option{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:11px;
+    border-radius:8px;
+    color:#fff;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:700;
+}
+
+.role-option:hover,
+.country-item:hover{
+    background:rgba(65,105,255,.17);
+}
+
+.role-option input{
+    width:18px;
+    height:18px;
+    accent-color:#527dff;
+}
+
+/* COUNTRY */
+
+.country-search{
+    margin-bottom:8px;
+}
+
+.country-list{
+    max-height:290px;
+    overflow-y:auto;
+}
+
+.country-item{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:11px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:700;
+}
+
+.country-flag{
+    width:28px;
+    text-align:center;
+    font-size:20px;
+}
+
+/* UPLOAD */
+
+.upload-box{
+    padding:14px;
+    border:1px dashed #3c5795;
+    border-radius:12px;
+    background:#080f2b;
+}
+
+.upload-box input{
+    height:auto;
+    padding:0;
+    border:0;
+    background:transparent;
+}
+
+/* SMALL CONTROLS */
+
+.photo-controls{
+    display:none;
+    margin-top:10px;
+    padding:12px;
+    border-radius:12px;
+    background:#060c24;
+    border:1px solid #293b72;
+}
+
+.control-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.control-row:last-child{
+    margin-bottom:0;
+}
+
+.control-row span{
+    width:65px;
+    color:#91a8e9;
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+}
+
+.control-row input[type="range"]{
+    height:5px;
+    padding:0;
+    accent-color:#527dff;
+}
+
+/* BACKGROUND */
+
+.bg-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.bg-reset{
+    height:42px;
+    padding:0 15px;
+    border-radius:10px;
+    border:1px solid #30467e;
+    background:#101a42;
+    color:#fff;
+    font-weight:800;
+}
+
+/* BUTTONS */
+
+.buttons{
+    display:flex;
+    gap:10px;
+    margin-top:5px;
+}
+
+.generate,
+.download{
+    flex:1;
+    height:54px;
+    border:0;
+    border-radius:12px;
+    font-family:Inter,sans-serif;
+    font-size:15px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.generate{
+    color:#fff;
+    background:linear-gradient(135deg,#2f6bff,#5b35ff);
+}
+
+.download{
+    display:none;
+    color:#07102d;
+    background:#fff;
+}
+
+.download.show{
+    display:block;
+}
+
+/* FRONT / BACK */
+
+.card-switch{
+    display:flex;
+    gap:8px;
+    margin:28px 0 12px;
+}
+
+.card-switch button{
+    flex:1;
+    height:46px;
+    border-radius:10px;
+    border:1px solid #293b72;
+    background:#0a1230;
+    color:#aebce0;
+    font-weight:800;
+}
+
+.card-switch button.active{
+    color:#fff;
+    background:#2f6bff;
+    border-color:#2f6bff;
+}
+
+/* PREVIEW */
+
+.preview-wrap{
+    width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    border-radius:20px;
+}
+
+.card-stage{
+    position:relative;
+    width:1200px;
+    height:800px;
+}
+
+/* CARD */
+
+.card{
+    position:relative;
+    width:1200px;
+    height:800px;
+    overflow:hidden;
+    border-radius:35px;
+    background:#05091c;
+    color:#fff;
+}
+
+.card-bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    z-index:0;
+}
+
+.card-overlay{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(3,7,27,.82) 0%,
+            rgba(3,7,27,.55) 42%,
+            rgba(3,7,27,.12) 78%,
+            rgba(3,7,27,.02) 100%
+        );
+}
+
+/* CONTENT */
+
+.front-content{
+    position:absolute;
+    z-index:4;
+    left:70px;
+    top:55px;
+    width:610px;
+}
+
+.brand-name{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:48px;
+    line-height:1;
+    font-weight:700;
+}
+
+.brand-sub{
+    margin-top:9px;
+    margin-bottom:35px;
+    color:#7395ff;
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:5px;
+}
+
+.card-name{
+    margin-bottom:7px;
+    font-family:"Space Grotesk",sans-serif;
+    font-size:40px;
+    line-height:1.1;
+    font-weight:700;
+    word-break:break-word;
+}
+
+.card-x{
+    margin-bottom:25px;
+    color:#8da8ff;
+    font-size:19px;
+    font-weight:700;
+}
+
+.details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    column-gap:35px;
+    row-gap:18px;
+}
+
+.detail{
+    min-width:0;
+}
+
+.detail-full{
+    grid-column:1/-1;
+    padding-bottom:11px;
+    border-bottom:1px solid rgba(86,119,220,.45);
+}
+
+.detail-label{
+    display:block;
+    margin-bottom:5px;
+    color:#7093ff;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:2.3px;
+}
+
+.detail-value{
+    display:block;
+    color:#fff;
+    font-family:"Space Grotesk",sans-serif;
+    font-size:19px;
+    font-weight:700;
+    line-height:1.2;
+    word-break:break-word;
+}
+
+/* USER PHOTO */
+
+.user-photo{
+    display:none;
+    position:absolute;
+    z-index:6;
+    right:72px;
+    top:105px;
+    width:190px;
+    height:190px;
+    object-fit:cover;
+    border-radius:50%;
+    border:5px solid rgba(255,255,255,.95);
+    box-shadow:
+        0 0 0 7px rgba(47,107,255,.22),
+        0 20px 45px rgba(0,0,0,.6);
+    cursor:grab;
+    user-select:none;
+    touch-action:none;
+}
+
+.user-photo:active{
+    cursor:grabbing;
+}
+
+/* FOOTER */
+
+.card-footer{
+    position:absolute;
+    z-index:5;
+    left:70px;
+    right:70px;
+    bottom:35px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:14px;
+    font-weight:800;
+}
+
+/* BACK */
+
+.back-card{
+    display:none;
+}
+
+.back-content{
+    position:absolute;
+    inset:0;
+    z-index:4;
+    padding:70px;
+}
+
+.back-title{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:48px;
+    font-weight:800;
+}
+
+.back-sub{
+    margin-top:8px;
+    color:#7595ff;
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:4px;
+}
+
+.back-grid{
+    margin-top:55px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.back-box{
+    min-height:130px;
+    padding:24px;
+    border:1px solid rgba(100,130,255,.35);
+    border-radius:18px;
+    background:rgba(5,10,35,.58);
+}
+
+.back-box-title{
+    margin-bottom:9px;
+    color:#7093ff;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.back-box-value{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:22px;
+    font-weight:700;
+    line-height:1.3;
+    word-break:break-word;
+}
+
+.back-footer{
+    position:absolute;
+    left:70px;
+    right:70px;
+    bottom:40px;
+    z-index:5;
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    font-weight:800;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    body{
+        padding:14px 8px 35px;
+    }
+
+    .form-box{
+        padding:15px;
+        border-radius:17px;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    .card{
+        border-radius:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+    <h1>DliCOM ID Card</h1>
+    <p>Create your DliCOM Community Identity</p>
+</div>
+
+<div class="form-box">
+
+<div class="form-title">
+    Create your card
+</div>
+
+<!-- NAME -->
+
+<div class="field">
+<label>Name</label>
+<input
+    id="name"
+    type="text"
+    placeholder="Type your name"
+>
+</div>
+
+<!-- X -->
+
+<div class="field">
+<label>X Username</label>
+<input
+    id="xUsername"
+    type="text"
+    placeholder="@username"
+>
+</div>
+
+<!-- DISCORD -->
+
+<div class="field">
+<label>Discord Username</label>
+<input
+    id="discord"
+    type="text"
+    placeholder="Discord username"
+>
+</div>
+
+<!-- GENDER -->
+
+<div class="field">
+<label>Gender</label>
+
+<select id="gender">
+<option value="">Select gender</option>
+<option value="Male">Male</option>
+<option value="Female">Female</option>
+<option value="Other">Other</option>
+</select>
+</div>
+
+<!-- ROLE -->
+
+<div class="field">
+
+<label>Roles</label>
+
+<div class="role-select">
+
+<div class="role-button" id="roleButton">
+<span class="role-text" id="roleText">
+Select roles
+</span>
+<span>▼</span>
+</div>
+
+<div class="role-menu" id="roleMenu">
+
+<label class="role-option">
+<input type="checkbox" value="Dliever">
+<span>Dliever</span>
+</label>
+
+<label class="role-option">
+<input type="checkbox" value="Dcoded">
+<span>Dcoded</span>
+</label>
+
+<label class="role-option">
+<input type="checkbox" value="DCO">
+<span>DCO</span>
+</label>
+
+<label class="role-option">
+<input type="checkbox" value="MOD">
+<span>MOD</span>
+</label>
+
+<label class="role-option">
+<input type="checkbox" value="Regional Helper">
+<span>Regional Helper</span>
+</label>
+
+<label class="role-option">
+<input type="checkbox" value="Regional Lead">
+<span>Regional Lead</span>
+</label>
+
+<label class="role-option">
+<input type="checkbox" value="Community Team">
+<span>Community Team</span>
+</label>
+
+<label class="role-option">
+<input type="checkbox" value="DliCOM App User">
+<span>DliCOM App User</span>
+</label>
+
+<label class="role-option">
+<input type="checkbox" value="Team">
+<span>Team</span>
+</label>
+
+</div>
+</div>
+</div>
+
+<!-- COUNTRY -->
+
+<div class="field">
+
+<label>Country / Region</label>
+
+<div class="country-select">
+
+<div class="country-button" id="countryButton">
+<span
+    class="country-text"
+    id="countryText"
+>
+🌐 Select country
+</span>
+<span>▼</span>
+</div>
+
+<div class="country-menu" id="countryMenu">
+
+<input
+    id="countrySearch"
+    class="country-search"
+    type="text"
+    placeholder="Search country..."
+>
+
+<div
+    class="country-list"
+    id="countryList"
+></div>
+
+</div>
+
+</div>
+</div>
+
+<!-- OG -->
+
+<div class="field">
+
+<label>OG Member</label>
+
+<select id="og">
+<option value="">Select</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select>
+
+</div>
+
+<!-- MEMBER SINCE -->
+
+<div class="field">
+
+<label>Member Since</label>
+
+<input
+    id="memberSince"
+    type="month"
+>
+
+</div>
+
+<!-- FACE -->
+
+<div class="field">
+
+<label>Personal Face / Photo</label>
+
+<div class="upload-box">
+
+<input
+    id="photoUpload"
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+>
+
+</div>
+
+<div
+    class="photo-controls"
+    id="photoControls"
+>
+
+<div class="control-row">
+
+<span>Size</span>
+
+<input
+    id="photoSize"
+    type="range"
+    min="100"
+    max="350"
+    value="190"
+>
+
+</div>
+
+<div class="control-row">
+
+<span>X</span>
+
+<input
+    id="photoX"
+    type="range"
+    min="0"
+    max="1000"
+    value="938"
+>
+
+</div>
+
+<div class="control-row">
+
+<span>Y</span>
+
+<input
+    id="photoY"
+    type="range"
+    min="0"
+    max="650"
+    value="105"
+>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- BACKGROUND -->
+
+<div class="field">
+
+<label>Card Background</label>
+
+<div class="upload-box">
+
+<input
+    id="backgroundUpload"
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+>
+
+</div>
+
+<div class="bg-actions">
+
+<button
+    type="button"
+    class="bg-reset"
+    id="resetBackground"
+>
+Reset to DliCOM Background
+</button>
+
+</div>
+
+</div>
+
+<!-- BUTTONS -->
+
+<div class="buttons">
+
+<button
+    class="generate"
+    id="generateBtn"
+>
+Generate PNG
+</button>
+
+<button
+    class="download"
+    id="downloadBtn"
+>
+Download PNG
+</button>
+
+</div>
+
+</div>
+
+<!-- FRONT / BACK -->
+
+<div class="card-switch">
+
+<button
+    id="frontBtn"
+    class="active"
+>
+Front
+</button>
+
+<button
+    id="backBtn"
+>
+Back
+</button>
+
+</div>
+
+<!-- PREVIEW -->
+
+<div class="preview-wrap">
+
+<div class="card-stage">
+
+<!-- FRONT CARD -->
+
+<div
+    id="frontCard"
+    class="card"
+>
+
+<img
+    id="frontBg"
+    class="card-bg"
+    src="card-bg.png"
+    alt=""
+>
+
+<div class="card-overlay"></div>
+
+<div class="front-content">
+
+<div class="brand-name">
+DliCOM
+</div>
+
+<div class="brand-sub">
+COMMUNITY ID
+</div>
+
+<div
+    class="card-name"
+    id="cardName"
+>
+Your Name
+</div>
+
+<div
+    class="card-x"
+    id="cardX"
+>
+@username
+</div>
+
+<div class="details">
+
+<div class="detail detail-full">
+
+<span class="detail-label">
+DLICOM ID
+</span>
+
+<span
+    class="detail-value"
+    id="cardId"
+>
+DLC-XXXXXX
+</span>
+
+</div>
+
+<div class="detail">
+
+<span class="detail-label">
+ROLE
+</span>
+
+<span
+    class="detail-value"
+    id="cardRole"
+>
+—
+</span>
+
+</div>
+
+<div class="detail">
+
+<span class="detail-label">
+REGION
+</span>
+
+<span
+    class="detail-value"
+    id="cardCountry"
+>
+—
+</span>
+
+</div>
+
+<div class="detail">
+
+<span class="detail-label">
+DISCORD
+</span>
+
+<span
+    class="detail-value"
+    id="cardDiscord"
+>
+—
+</span>
+
+</div>
+
+<div class="detail">
+
+<span class="detail-label">
+GENDER
+</span>
+
+<span
+    class="detail-value"
+    id="cardGender"
+>
+—
+</span>
+
+</div>
+
+<div class="detail">
+
+<span class="detail-label">
+OG MEMBER
+</span>
+
+<span
+    class="detail-value"
+    id="cardOG"
+>
+—
+</span>
+
+</div>
+
+<div class="detail">
+
+<span class="detail-label">
+MEMBER SINCE
+</span>
+
+<span
+    class="detail-value"
+    id="cardSince"
+>
+—
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<img
+    id="userPhoto"
+    class="user-photo"
+    alt=""
+>
+
+<div class="card-footer">
+
+<span>
+Official DliCOM Community Member
+</span>
+
+<span>
+dlicom.app
+</span>
+
+</div>
+
+</div>
+
+<!-- BACK CARD -->
+
+<div
+    id="backCard"
+    class="card back-card"
+>
+
+<img
+    id="backBg"
+    class="card-bg"
+    src="card-bg.png"
+    alt=""
+>
+
+<div class="card-overlay"></div>
+
+<div class="back-content">
+
+<div class="back-title">
+DliCOM
+</div>
+
+<div class="back-sub">
+COMMUNITY PROFILE
+</div>
+
+<div class="back-grid">
+
+<div class="back-box">
+
+<div class="back-box-title">
+DLICOM ID
+</div>
+
+<div
+    class="back-box-value"
+    id="backId"
+>
+DLC-XXXXXX
+</div>
+
+</div>
+
+<div class="back-box">
+
+<div class="back-box-title">
+COUNTRY
+</div>
+
+<div
+    class="back-box-value"
+    id="backCountry"
+>
+—
+</div>
+
+</div>
+
+<div class="back-box">
+
+<div class="back-box-title">
+ROLES
+</div>
+
+<div
+    class="back-box-value"
+    id="backRole"
+>
+—
+</div>
+
+</div>
+
+<div class="back-box">
+
+<div class="back-box-title">
+MEMBER SINCE
+</div>
+
+<div
+    class="back-box-value"
+    id="backSince"
+>
+—
+</div>
+
+</div>
+
+<div class="back-box">
+
+<div class="back-box-title">
+X USERNAME
+</div>
+
+<div
+    class="back-box-value"
+    id="backX"
+>
+@username
+</div>
+
+</div>
+
+<div class="back-box">
+
+<div class="back-box-title">
+DISCORD
+</div>
+
+<div
+    class="back-box-value"
+    id="backDiscord"
+>
+—
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="back-footer">
+
+<span>
+Official DliCOM Community Member
+</span>
+
+<span>
+dlicom.app
+</span>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+   COUNTRY DATA
+========================= */
+
+const countries = [
+
+["AF","Afghanistan"],
+["AL","Albania"],
+["DZ","Algeria"],
+["AD","Andorra"],
+["AO","Angola"],
+["AR","Argentina"],
+["AM","Armenia"],
+["AU","Australia"],
+["AT","Austria"],
+["AZ","Azerbaijan"],
+
+["BD","Bangladesh"],
+["BE","Belgium"],
+["BT","Bhutan"],
+["BR","Brazil"],
+["BG","Bulgaria"],
+
+["CA","Canada"],
+["CL","Chile"],
+["CN","China"],
+["CO","Colombia"],
+["HR","Croatia"],
+["CY","Cyprus"],
+["CZ","Czechia"],
+
+["DK","Denmark"],
+["EG","Egypt"],
+["FI","Finland"],
+["FR","France"],
+
+["DE","Germany"],
+["GH","Ghana"],
+["GR","Greece"],
+
+["HK","Hong Kong"],
+["HU","Hungary"],
+
+["IS","Iceland"],
+["IN","India"],
+["ID","Indonesia"],
+["IE","Ireland"],
+["IL","Israel"],
+["IT","Italy"],
+
+["JP","Japan"],
+["JO","Jordan"],
+
+["KZ","Kazakhstan"],
+["KE","Kenya"],
+["KR","South Korea"],
+["KW","Kuwait"],
+
+["MY","Malaysia"],
+["MV","Maldives"],
+["MX","Mexico"],
+
+["NP","Nepal"],
+["NL","Netherlands"],
+["NZ","New Zealand"],
+["NG","Nigeria"],
+["NO","Norway"],
+
+["OM","Oman"],
+
+["PK","Pakistan"],
+["PH","Philippines"],
+["PL","Poland"],
+["PT","Portugal"],
+
+["QA","Qatar"],
+
+["RO","Romania"],
+["RU","Russia"],
+
+["SA","Saudi Arabia"],
+["RS","Serbia"],
+["SG","Singapore"],
+["ZA","South Africa"],
+["ES","Spain"],
+["LK","Sri Lanka"],
+["SE","Sweden"],
+["CH","Switzerland"],
+
+["TW","Taiwan"],
+["TH","Thailand"],
+["TR","Turkey"],
+
+["UA","Ukraine"],
+["AE","United Arab Emirates"],
+["GB","United Kingdom"],
+["US","United States"],
+
+["VN","Vietnam"],
+["ZM","Zambia"],
+["ZW","Zimbabwe"]
+
+];
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const $ = id =>
+document.getElementById(id);
+
+const nameInput =
+$("name");
+
+const xInput =
+$("xUsername");
+
+const discordInput =
+$("discord");
+
+const genderInput =
+$("gender");
+
+const ogInput =
+$("og");
+
+const sinceInput =
+$("memberSince");
+
+const photoUpload =
+$("photoUpload");
+
+const photoControls =
+$("photoControls");
+
+const photoSize =
+$("photoSize");
+
+const photoX =
+$("photoX");
+
+const photoY =
+$("photoY");
+
+const backgroundUpload =
+$("backgroundUpload");
+
+const resetBackground =
+$("resetBackground");
+
+const roleButton =
+$("roleButton");
+
+const roleMenu =
+$("roleMenu");
+
+const roleText =
+$("roleText");
+
+const countryButton =
+$("countryButton");
+
+const countryMenu =
+$("countryMenu");
+
+const countrySearch =
+$("countrySearch");
+
+const countryList =
+$("countryList");
+
+const countryText =
+$("countryText");
+
+const generateBtn =
+$("generateBtn");
+
+const downloadBtn =
+$("downloadBtn");
+
+const frontCard =
+$("frontCard");
+
+const backCard =
+$("backCard");
+
+const frontBtn =
+$("frontBtn");
+
+const backBtn =
+$("backBtn");
+
+const userPhoto =
+$("userPhoto");
+
+const frontBg =
+$("frontBg");
+
+const backBg =
+$("backBg");
+
+/* =========================
+   ID
+========================= */
+
+function createDliComId(){
+
+    const chars =
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let id =
+    "DLC-";
+
+    for(let i=0;i<6;i++){
+
+        id +=
+        chars[
+            Math.floor(
+                Math.random() *
+                chars.length
+            )
+        ];
+
+    }
+
+    return id;
+}
+
+let dlicomId =
+createDliComId();
+
+/* =========================
+   FLAG
+========================= */
+
+function flagEmoji(code){
+
+    return code
+    .toUpperCase()
+    .replace(
+        /./g,
+        char =>
+        String.fromCodePoint(
+            127397 +
+            char.charCodeAt(0)
+        )
+    );
+
+}
+
+/* =========================
+   COUNTRY
+========================= */
+
+function renderCountries(search=""){
+
+    countryList.innerHTML="";
+
+    const query =
+    search.toLowerCase().trim();
+
+    countries
+    .filter(item =>
+        item[1]
+        .toLowerCase()
+        .includes(query)
+    )
+    .forEach(item=>{
+
+        const div =
+        document.createElement("div");
+
+        div.className =
+        "country-item";
+
+        const flag =
+        flagEmoji(item[0]);
+
+        div.innerHTML=`
+            <span class="country-flag">
+                ${flag}
+            </span>
+
+            <span>
+                ${item[1]}
+            </span>
+        `;
+
+        div.onclick=()=>{
+
+            countryText.textContent =
+            flag+" "+item[1];
+
+            countryText.dataset.country =
+            item[1];
+
+            countryText.dataset.flag =
+            flag;
+
+            countryMenu
+            .classList
+            .remove("open");
+
+        };
+
+        countryList.appendChild(div);
+
+    });
+
+    const other =
+    document.createElement("div");
+
+    other.className =
+    "country-item";
+
+    other.innerHTML=`
+        <span class="country-flag">
+            🌐
+        </span>
+        <span>
+            Other
+        </span>
+    `;
+
+    other.onclick=()=>{
+
+        countryText.textContent =
+        "🌐 Other";
+
+        countryText.dataset.country =
+        "Other";
+
+        countryText.dataset.flag =
+        "🌐";
+
+        countryMenu
+        .classList
+        .remove("open");
+
+    };
+
+    countryList.appendChild(other);
+
+}
+
+renderCountries();
+
+/* =========================
+   DROPDOWNS
+========================= */
+
+roleButton.onclick =
+event=>{
+
+    event.stopPropagation();
+
+    roleMenu
+    .classList
+    .toggle("open");
+
+};
+
+countryButton.onclick =
+event=>{
+
+    event.stopPropagation();
+
+    countryMenu
+    .classList
+    .toggle("open");
+
+    if(
+        countryMenu
+        .classList
+        .contains("open")
+    ){
+
+        setTimeout(
+            ()=>countrySearch.focus(),
+            50
+        );
+
+    }
+
+};
+
+roleMenu.onclick =
+event =>
+event.stopPropagation();
+
+countryMenu.onclick =
+event =>
+event.stopPropagation();
+
+countrySearch.oninput =
+function(){
+
+    renderCountries(
+        this.value
+    );
+
+};
+
+document.onclick=()=>{
+
+    roleMenu
+    .classList
+    .remove("open");
+
+    countryMenu
+    .classList
+    .remove("open");
+
+};
+
+/* =========================
+   ROLES
+========================= */
+
+function getRoles(){
+
+    return [
+
+        ...roleMenu
+        .querySelectorAll(
+            'input[type="checkbox"]:checked'
+        )
+
+    ].map(
+        input =>
+        input.value
+    );
+
+}
+
+function updateRoleText(){
+
+    const roles =
+    getRoles();
+
+    roleText.textContent =
+    roles.length
+    ? roles.join(" • ")
+    : "Select roles";
+
+}
+
+roleMenu
+.querySelectorAll(
+    'input[type="checkbox"]'
+)
+.forEach(input=>{
+
+    input.onchange =
+    updateRoleText;
+
+});
+
+/* =========================
+   MEMBER SINCE
+========================= */
+
+function formatMonth(value){
+
+    if(!value)
+    return "—";
+
+    const [
+        year,
+        month
+    ] =
+    value.split("-");
+
+    const months=[
+        "Jan","Feb","Mar",
+        "Apr","May","Jun",
+        "Jul","Aug","Sep",
+        "Oct","Nov","Dec"
+    ];
+
+    return (
+        months[
+            Number(month)-1
+        ] +
+        " " +
+        year
+    );
+}
+
+/* =========================
+   BACKGROUND UPLOAD
+========================= */
+
+backgroundUpload.onchange =
+function(){
+
+    const file =
+    this.files &&
+    this.files[0];
+
+    if(!file)
+    return;
+
+    if(
+        !file.type.startsWith(
+            "image/"
+        )
+    ){
+
+        alert(
+            "Please select an image."
+        );
+
+        return;
+    }
+
+    const reader =
+    new FileReader();
+
+    reader.onload =
+    event=>{
+
+        const src =
+        event.target.result;
+
+        frontBg.src =
+        src;
+
+        backBg.src =
+        src;
+
+    };
+
+    reader.readAsDataURL(file);
+
+};
+
+resetBackground.onclick =
+function(){
+
+    frontBg.src =
+    "card-bg.png";
+
+    backBg.src =
+    "card-bg.png";
+
+    backgroundUpload.value =
+    "";
+
+};
+
+/* =========================
+   PHOTO UPLOAD
+========================= */
+
+photoUpload.onchange =
+function(){
+
+    const file =
+    this.files &&
+    this.files[0];
+
+    if(!file)
+    return;
+
+    if(
+        !file.type.startsWith(
+            "image/"
+        )
+    ){
+
+        alert(
+            "Please select an image."
+        );
+
+        return;
+    }
+
+    const reader =
+    new FileReader();
+
+    reader.onload =
+    event=>{
+
+        userPhoto.src =
+        event.target.result;
+
+        userPhoto.style.display =
+        "block";
+
+        photoControls.style.display =
+        "block";
+
+        updatePhoto();
+
+    };
+
+    reader.readAsDataURL(file);
+
+};
+
+/* =========================
+   PHOTO POSITION
+========================= */
+
+function updatePhoto(){
+
+    const size =
+    Number(
+        photoSize.value
+    );
+
+    const x =
+    Number(
+        photoX.value
+    );
+
+    const y =
+    Number(
+        photoY.value
+    );
+
+    userPhoto.style.width =
+    size+"px";
+
+    userPhoto.style.height =
+    size+"px";
+
+    userPhoto.style.right =
+    "auto";
+
+    userPhoto.style.left =
+    x+"px";
+
+    userPhoto.style.top =
+    y+"px";
+
+}
+
+photoSize.oninput =
+updatePhoto;
+
+photoX.oninput =
+updatePhoto;
+
+photoY.oninput =
+updatePhoto;
+
+/* =========================
+   PHOTO DRAG
+========================= */
+
+let dragging =
+false;
+
+let dragStartX = 0;
+let dragStartY = 0;
+
+let startLeft = 0;
+let startTop = 0;
+
+userPhoto.addEventListener(
+    "pointerdown",
+    event=>{
+
+        if(
+            userPhoto.style.display ===
+            "none"
+        )
+        return;
+
+        dragging =
+        true;
+
+        userPhoto.setPointerCapture(
+            event.pointerId
+        );
+
+        dragStartX =
+        event.clientX;
+
+        dragStartY =
+        event.clientY;
+
+        startLeft =
+        parseFloat(
+            userPhoto.style.left
+        ) || 0;
+
+        startTop =
+        parseFloat(
+            userPhoto.style.top
+        ) || 0;
+
+    }
+);
+
+userPhoto.addEventListener(
+    "pointermove",
+    event=>{
+
+        if(!dragging)
+        return;
+
+        const dx =
+        event.clientX -
+        dragStartX;
+
+        const dy =
+        event.clientY -
+        dragStartY;
+
+        let newLeft =
+        startLeft + dx;
+
+        let newTop =
+        startTop + dy;
+
+        const size =
+        parseFloat(
+            userPhoto.style.width
+        ) || 190;
+
+        newLeft =
+        Math.max(
+            0,
+            Math.min(
+                1200-size,
+                newLeft
+            )
+        );
+
+        newTop =
+        Math.max(
+            0,
+            Math.min(
+                800-size,
+                newTop
+            )
+        );
+
+        userPhoto.style.left =
+        newLeft+"px";
+
+        userPhoto.style.top =
+        newTop+"px";
+
+        photoX.value =
+        Math.round(newLeft);
+
+        photoY.value =
+        Math.round(newTop);
+
+    }
+);
+
+userPhoto.addEventListener(
+    "pointerup",
+    ()=>{
+        dragging=false;
+    }
+);
+
+/* =========================
+   GENERATE
+========================= */
+
+function generateCard(){
+
+    dlicomId =
+    createDliComId();
+
+    const name =
+    nameInput.value.trim()
+    || "Your Name";
+
+    let x =
+    xInput.value.trim()
+    || "@username";
+
+    if(
+        x !== "@username" &&
+        !x.startsWith("@")
+    ){
+
+        x =
+        "@"+x;
+
+    }
+
+    const discord =
+    discordInput.value.trim()
+    || "—";
+
+    const gender =
+    genderInput.value
+    || "—";
+
+    const roles =
+    getRoles();
+
+    const country =
+    countryText.dataset.country
+    || "—";
+
+    const flag =
+    countryText.dataset.flag
+    || "";
+
+    const og =
+    ogInput.value
+    || "—";
+
+    const since =
+    formatMonth(
+        sinceInput.value
+    );
+
+    const roleValue =
+    roles.length
+    ? roles.join(" • ")
+    : "—";
+
+    $("cardName").textContent =
+    name;
+
+    $("cardX").textContent =
+    x;
+
+    $("cardId").textContent =
+    dlicomId;
+
+    $("cardRole").textContent =
+    roleValue;
+
+    $("cardCountry").textContent =
+    country === "—"
+    ? "—"
+    : flag+" "+country;
+
+    $("cardDiscord").textContent =
+    discord;
+
+    $("cardGender").textContent =
+    gender;
+
+    $("cardOG").textContent =
+    og;
+
+    $("cardSince").textContent =
+    since;
+
+    /* BACK */
+
+    $("backId").textContent =
+    dlicomId;
+
+    $("backCountry").textContent =
+    country === "—"
+    ? "—"
+    : flag+" "+country;
+
+    $("backRole").textContent =
+    roleValue;
+
+    $("backSince").textContent =
+    since;
+
+    $("backX").textContent =
+    x;
+
+    $("backDiscord").textContent =
+    discord;
+
+    downloadBtn
+    .classList
+    .add("show");
+
+    generateBtn.textContent =
+    "Generated ✓";
+
+}
+
+/* =========================
+   FRONT / BACK
+========================= */
+
+function showFront(){
+
+    frontCard.style.display =
+    "block";
+
+    backCard.style.display =
+    "none";
+
+    frontBtn.classList
+    .add("active");
+
+    backBtn.classList
+    .remove("active");
+
+}
+
+function showBack(){
+
+    frontCard.style.display =
+    "none";
+
+    backCard.style.display =
+    "block";
+
+    frontBtn.classList
+    .remove("active");
+
+    backBtn.classList
+    .add("active");
+
+}
+
+frontBtn.onclick =
+showFront;
+
+backBtn.onclick =
+showBack;
+
+generateBtn.onclick =
+generateCard;
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+downloadBtn.onclick =
+async function(){
+
+    downloadBtn.textContent =
+    "Generating...";
+
+    downloadBtn.disabled =
+    true;
+
+    try{
+
+        const target =
+        backCard.style.display !==
+        "none"
+        ? backCard
+        : frontCard;
+
+        const canvas =
+        await html2canvas(
+            target,
+            {
+                width:1200,
+                height:800,
+                scale:3,
+                useCORS:true,
+                allowTaint:true,
+                backgroundColor:
+                "#05091c",
+                logging:false,
+                imageTimeout:15000,
+                scrollX:0,
+                scrollY:0
+            }
+        );
+
+        const link =
+        document.createElement("a");
+
+        let filename =
+        nameInput.value
+        .trim()
+        .replace(
+            /[^a-z0-9_-]/gi,
+            "-"
+        );
+
+        if(!filename)
+        filename =
+        dlicomId;
+
+        const side =
+        target === backCard
+        ? "Back"
+        : "Front";
+
+        link.download =
+        "DliCOM-ID-"+
+        filename+
+        "-"+
+        side+
+        ".png";
+
+        link.href =
+        canvas.toDataURL(
+            "image/png"
+        );
+
+        link.click();
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "PNG তৈরি করা যায়নি। আবার চেষ্টা করো।"
+        );
+
+    }
+
+    downloadBtn.textContent =
+    "Download PNG";
+
+    downloadBtn.disabled =
+    false;
+
+};
+
+</script>
+
+</body>
+</html>
